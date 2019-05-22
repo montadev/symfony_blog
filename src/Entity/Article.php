@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Symfony\Component\Validator\Constraints as Assert;
+
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -9,6 +11,12 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Article
 {
+
+      public function __construct()
+      {
+
+        $this->createdAt= new \DateTime();
+      }
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -18,11 +26,13 @@ class Article
 
     /**
      * @ORM\Column(type="string", length=255)
+     *@Assert\NotBlank
      */
     private $title;
 
     /**
      * @ORM\Column(type="text")
+     * @Assert\NotBlank
      */
     private $content;
 

@@ -4,7 +4,11 @@ namespace App\Controller;
 
 use App\Entity\Article;
 use App\Repository\ArticleRepository;
+use Symfony\Component\HttpFoundation\Request;
+use Doctrine\Common\Persistence\ObjectManager;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class BlogController extends AbstractController
@@ -30,6 +34,34 @@ class BlogController extends AbstractController
      {
          return $this->render('blog/home.html.twig');
      }
+     
+
+      /**
+       * @Route("/blog/new",name="blog_create")
+       */
+      public function create(Request $request,ObjectManager $manager,ValidatorInterface $validator){
+
+         if($request->request->count() > 0)
+         {
+                $article=new Article();
+                
+                $article->setTitle($request->get('title'))
+                         ->setContent($request->get('content'))
+                         ->setImage("http://placehold.it/350x150");
+                         
+               
+                
+
+                
+                   $manager->persist($article);
+                   $manager->flush();   
+                   
+                   return $this->redirectToRoute('blog_show',['id'=>$article->getId()]);
+         }
+        
+      
+        return $this->render('blog/create.html.twig');
+      }
 
 
      /**
@@ -45,4 +77,5 @@ class BlogController extends AbstractController
              'article'=>$article
            ]);
       }
+     
 }
