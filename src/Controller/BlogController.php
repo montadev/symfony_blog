@@ -8,6 +8,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -39,28 +42,20 @@ class BlogController extends AbstractController
       /**
        * @Route("/blog/new",name="blog_create")
        */
-      public function create(Request $request,ObjectManager $manager,ValidatorInterface $validator){
+      public function create(Request $request,ObjectManager $manager){
 
-         if($request->request->count() > 0)
-         {
-                $article=new Article();
-                
-                $article->setTitle($request->get('title'))
-                         ->setContent($request->get('content'))
-                         ->setImage("http://placehold.it/350x150");
-                         
-               
-                
-
-                
-                   $manager->persist($article);
-                   $manager->flush();   
-                   
-                   return $this->redirectToRoute('blog_show',['id'=>$article->getId()]);
-         }
+         $article=new Article();
+         $form=$this->createFormBuilder($article)
+                         ->add('title')
+                         ->add('content')
+                         ->add('image')                        
+                         ->getForm();
         
       
-        return $this->render('blog/create.html.twig');
+        return $this->render('blog/create.html.twig',[
+
+          'formArticle'=>$form->createView() 
+        ]);
       }
 
 

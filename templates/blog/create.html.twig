@@ -1,22 +1,12 @@
 {% extends 'base.html.twig'%}
 
+{% form_theme formArticle 'bootstrap_4_layout.html.twig' %}
 {% block body %}
 
-  <ul>
-  {% if errors is defined %}
-    {% for error in errors %}
-        <li>{{ error.message }}</li>
-    {% endfor %}
-  {% endif %}  
-
-</ul>
+  
 <h1>Creé un Article </h1>
-
-<form action="{{path('blog_create')}}" method="post">
-
-<input type="text" name="title" placeholder="Titre de l'article">
-<textarea name="content" placeholder="Contenu de l'article"></textarea>
-<input type="text" name="image" placeholder="Image de l'article">
-<button type="submit">Enregister</button>
-</form>
+{{form_start(formArticle)}}
+   {{form_widget(formArticle)}}
+   <button type="submit" class="btn btn-success">Ajouterl'article</button>
+{{form_end(formArticle)}}
 {% endblock %}
